@@ -56,11 +56,11 @@ public:
 	OrderManager();
 	~OrderManager();
     
-    static OrderManager & GetInstance()
-    {
-        static OrderManager m_instance;
-        return m_instance;
-    }
+	static OrderManager & GetInstance()
+	{
+		static OrderManager m_instance;
+		return m_instance;
+	}
 	
 	// trader operations - these return false if there is a problem
 	virtual bool OnTraderEnter(const OrderIdentifier& aInternal, uint32_t
@@ -86,7 +86,7 @@ public:
 	void Dump();
     
 	// Reset the member variable for the Host test
-    void Reset();
+	void Reset();
     
 
 private:
@@ -95,23 +95,21 @@ private:
 	uint16_t GetIndexOfMarket(const std::string& aExternal) const;
 
 private:
+	WfirstRWLock m_rwLockOfSubmittedMap;
+   	mutable WfirstRWLock m_rwLockOfActivatedMap[MAX_NUMBER_OF_MARKET];
+	WfirstRWLock m_rwLockOfCancelledMap;
+	WfirstRWLock m_rwLockOfCancelPending;
     
-    WfirstRWLock m_rwLockOfSubmittedMap;
-    mutable WfirstRWLock m_rwLockOfActivatedMap[MAX_NUMBER_OF_MARKET];
-    WfirstRWLock m_rwLockOfCancelledMap;
-    WfirstRWLock m_rwLockOfCancelPending;
-    
-    mutable WfirstRWLock m_rwLockOfIdExtStrCorresponding;
-    WfirstRWLock m_rwLockOfIdIntStrCorresponding;
+	mutable WfirstRWLock m_rwLockOfIdExtStrCorresponding;
+	WfirstRWLock m_rwLockOfIdIntStrCorresponding;
     
 	std::unordered_map<std::string, OrderAttribute> m_order_submitted;
 	std::unordered_map<std::string, OrderAttribute> m_order_activated[MAX_NUMBER_OF_MARKET];
 	std::unordered_map<std::string, OrderAttribute> m_order_cancelled;
-    std::unordered_map<std::string, int /* placeholder */> m_order_cancel_pending;
+	std::unordered_map<std::string, int /* placeholder */> m_order_cancel_pending;
     
-    std::unordered_map<std::string/* aExternal */, std::string/* aInternal */>    m_id_ext_str_corresponding;
-    std::unordered_map<std::string/* aInternal */, std::string/* aExternal */>    m_id_int_str_corresponding;
-    
+	std::unordered_map<std::string/* aExternal */, std::string/* aInternal */>    m_id_ext_str_corresponding;
+	std::unordered_map<std::string/* aInternal */, std::string/* aExternal */>    m_id_int_str_corresponding; 
 };
 
 #endif // __ORDER_MANAGER_H
