@@ -15,6 +15,7 @@ The trader can perform the following requests. Each of these includes the OrderI
 cancellation.
 
 The exchange can provide the following updates:
+
     New order confirmed. Contains both the OrderIdentifier and the exchange's text identifier.
     Order traded. Includes quantity traded and exchange's identifier.
     Order cancelled. This can be due to the trader cancelling it, or the exchange cancelling the order. Contains only exchange's identifier.
