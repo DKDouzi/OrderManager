@@ -46,9 +46,9 @@ bool OrderManager::OnTraderEnter(const OrderIdentifier& aInternal, uint32_t
     unique_writeguard<WfirstRWLock> writeLockSubmitted(m_rwLockOfSubmittedMap);
     
     // The last time the quantity and price are set as valid values.
-	m_order_submitted[idStr] = OrderAttribute(aPrice, aQuantity);
+    m_order_submitted[idStr] = OrderAttribute(aPrice, aQuantity);
 
-	return true;
+    return true;
 }
 
 bool OrderManager::OnTraderCancel(const OrderIdentifier& aInternal)
@@ -79,7 +79,7 @@ bool OrderManager::OnTraderCancel(const OrderIdentifier& aInternal)
     //OnExchangeCancel(extIdStr);
     /* End, For test! */
     
-	return true;
+    return true;
 }
 
 bool OrderManager::OnExchangeNew(const OrderIdentifier& aInternal, const
@@ -126,7 +126,7 @@ bool OrderManager::OnExchangeNew(const OrderIdentifier& aInternal, const
         m_id_int_str_corresponding[idStr] = aExternal;
     }
     
-	return true;
+    return true;
 }
 
 bool OrderManager::OnExchangeTrade(const std::string& aExternal, uint32_t
@@ -170,42 +170,40 @@ bool OrderManager::OnExchangeTrade(const std::string& aExternal, uint32_t
 			return false;
         }
 
-		if (0 == m_order_activated[marketIndex][idStr]._quantity)
-		{
-			tempAttribut = m_order_activated[marketIndex][idStr];
-
-			m_order_activated[marketIndex].erase(idStr);
-		}
+        if (0 == m_order_activated[marketIndex][idStr]._quantity)
+	{
+		tempAttribut = m_order_activated[marketIndex][idStr];
+		m_order_activated[marketIndex].erase(idStr);
+	}
     }
 
-	if (tempAttribut._quantity == 0)
-	{
-		unique_writeguard<WfirstRWLock> writeLockExtCorresponding(m_rwLockOfIdExtStrCorresponding);
-		m_order_cancelled[idStr] = tempAttribut; /* quantity = 0 */
+    if (tempAttribut._quantity == 0)
+    {
+	unique_writeguard<WfirstRWLock> writeLockExtCorresponding(m_rwLockOfIdExtStrCorresponding);
+	m_order_cancelled[idStr] = tempAttribut; /* quantity = 0 */
 		
-		// Update the cancel pending map.
-		unique_writeguard<WfirstRWLock> writeLockCancelPending(m_rwLockOfCancelPending);
-		if (m_order_cancel_pending.end() != m_order_cancel_pending.find(idStr))
-		{
-			m_order_cancel_pending.erase(idStr);
-		}
+	// Update the cancel pending map.
+	unique_writeguard<WfirstRWLock> writeLockCancelPending(m_rwLockOfCancelPending);
+	if (m_order_cancel_pending.end() != m_order_cancel_pending.find(idStr))
+	{
+		m_order_cancel_pending.erase(idStr);
 	}
+    }
     
-	return true;
+    return true;
 }
 
 bool OrderManager::OnExchangeCancel(const std::string& aExternal)
 {
     std::string idStr("");
     
-	{
+    {
         unique_readguard<WfirstRWLock> readLockExtCorresponding(m_rwLockOfIdExtStrCorresponding);
         if(m_id_ext_str_corresponding.end() == m_id_ext_str_corresponding.find(aExternal))
         {
             std::cout << "OnExchangeCancel(), [" <<  aExternal << "] not in ext_str_corresponding!" << std::endl;
             return false;
         }
-        
         
         idStr = m_id_ext_str_corresponding[aExternal];
     }
@@ -242,7 +240,7 @@ bool OrderManager::OnExchangeCancel(const std::string& aExternal)
         }
     }
    
-	return true;
+    return true;
 }
 
 bool OrderManager::IsOrderActive(const OrderIdentifier& aInternal) const
@@ -259,14 +257,14 @@ bool OrderManager::IsOrderActive(const OrderIdentifier& aInternal) const
         return false;
     }
     
-	return true;
+    return true;
 }
 
 bool OrderManager::IsOrderActive(const std::string& aExternal) const
 {
     std::string idStr("");
 
-	{
+    {
         unique_readguard<WfirstRWLock> readLockExtCorresponding(m_rwLockOfIdExtStrCorresponding);
         if(m_id_ext_str_corresponding.end() == m_id_ext_str_corresponding.find(aExternal))
         {
@@ -294,14 +292,13 @@ bool OrderManager::IsOrderActive(const std::string& aExternal) const
         return false;
     }
     
-	return true;
+    return true;
 }
 
 uint32_t OrderManager::GetActiveOrderQuantity(const OrderIdentifier&
 	aInternal) const
 {
-    
-	std::string idStr = OrderIdentifierToStr(aInternal);
+    std::string idStr = OrderIdentifierToStr(aInternal);
     uint16_t marketIndex = aInternal._market;
     
     unique_readguard<WfirstRWLock> readLockActivated(m_rwLockOfActivatedMap[marketIndex]);
