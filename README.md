@@ -26,6 +26,7 @@ The trader must not reuse a previously used order identifier, and they are only 
 An order becomes active when the exchange confirms it, and stops being active when the exchange provides a cancel update on the order or a trade update which uses all of the remaining quantity of the order.
 
 Requests and updates have restrictions in the sequence in which they can occur for a specific order. Here A->B means that B can only occur after A, if it occurs. There are no restrictions on sequencing between different orders.
+
     Enter order -> New order confirmed
     New order confirmed -> Order traded
     New order confirmed -> Order cancelled
