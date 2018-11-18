@@ -10,9 +10,9 @@ OrderIdentifier.
 When a response is received from the exchange the order manager must be able to retrieve the information using the text identifier.
 
 The trader can perform the following requests. Each of these includes the OrderIdentifier but not the exchange's identifier:
+
     Enter order. Includes OrderIdentifier, price and quantity but not exchange's identifier (this is provided when the exchange confirms the order).
-    Cancel order. Only the OrderIdentifier is provided. The order is considered as still in the market until the exchange confirms the
-cancellation.
+    Cancel order. Only the OrderIdentifier is provided. The order is considered as still in the market until the exchange confirms the cancellation.
 
 The exchange can provide the following updates:
 
